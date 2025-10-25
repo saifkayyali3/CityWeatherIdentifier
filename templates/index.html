@@ -1,0 +1,53 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>City Weather Identifier</title>
+
+        <link rel="icon" href="{{ url_for('static', filename='images/CityWeatherIdentifier.png') }}" type="image/png">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="{{ url_for('static', filename='CSS/Style.css') }}">
+    </head>
+
+    <body>
+      <h1 id="header1">City Weather Identifier</h1>
+      <br>
+      <hr>
+      <br>
+      <div class="form-container">
+        <form method="POST" class="mb-4" id="form">
+            <label style="font-size: 20px;">Enter City:</label>
+            <input id="city" type="text" class="form-control" name="city"> 
+            <br>
+            <div class="col-md-4">
+            <select id="dropdown" class="form-select" name="Weather-Details">
+              {% for opt in options %}
+               <option value="{{ opt }}">{{ opt }}</option>
+              {% endfor %}
+              </select>
+            </div>
+            <br>
+            <div class="col-md-2">
+              <button id="button" class="btn btn-primary w-100" type="submit">Get Weather</button>
+            </div>
+          </form>
+      </div>
+      <div id="textarea">
+        {% if name %} 
+        <h3 id="cityname">City name: {{name}}</h3>
+        {% endif %}
+
+       {% if table_html %}
+         <div class="mt-4">
+          {{ table_html | safe }}
+         </div>
+        {% endif %}
+         {% if error %}
+          <div class="alert alert-danger text-center">{{ error }}</div>
+         {% endif %}
+      </div>
+     
+     <script src="{{ url_for('static', filename='JS/Validation.js') }}"></script>
+     <script src="{{ url_for('static', filename='JS/downscroll.js') }}"></script>
+   </body>
+</html>

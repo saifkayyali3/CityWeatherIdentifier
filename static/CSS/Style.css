@@ -1,0 +1,21 @@
+body{
+    background-color: aqua;
+    text-align: center;
+    justify-content: center;
+}
+#header1{
+color: green;
+font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.form-container{
+    width: 700px;
+    margin: 0 auto;
+}
+#dropdown{
+    justify-content: center;
+}
+#cityname{
+    font-family: 'Times New Roman', Times, serif;
+    
+}
+
