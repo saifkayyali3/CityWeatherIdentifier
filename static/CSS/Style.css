@@ -8,19 +8,26 @@ color: green;
 font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 .form-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 90%;
-    max-width: 600px;
+    max-width: 800px;
     margin: 20px auto;
     padding: 20px;
     box-sizing: border-box;
+    gap: 10px;
 }
 #dropdown{
     display: flex;
     justify-content: center;
 }
 .form-control, .form-select, .btn{
-width: 100%;
-margin: 5px 0;
+    width: 100%;
+    flex: 1 1 auto;
+    min-width: 200px;
+    margin: 10px 0;
+    box-sizing: border-box;
 }
 #cityname{
     font-family: 'Times New Roman', Times, serif;
@@ -42,8 +49,14 @@ margin: 5px 0;
     font-size: 1.5rem;
 }
 .form-container{
+    width: 95%;
     padding: 10px;
     margin: 10px auto;
+    flex-direction:column ;
+}
+.form-control,.form-select,.btn{
+    max-width: 100%;
+    min-width: auto;
 }
 .table {
     font-size: 0.9rem;
