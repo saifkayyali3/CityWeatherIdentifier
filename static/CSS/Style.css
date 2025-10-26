@@ -1,21 +1,52 @@
 body{
     background-color: aqua;
     text-align: center;
-    justify-content: center;
+    margin: 0;
 }
 #header1{
 color: green;
 font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 .form-container{
-    width: 700px;
-    margin: 0 auto;
+    width: 90%;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    box-sizing: border-box;
 }
 #dropdown{
+    display: flex;
     justify-content: center;
+}
+.form-control, .form-select, .btn{
+width: 100%;
+margin: 5px 0;
 }
 #cityname{
     font-family: 'Times New Roman', Times, serif;
     
+}
+
+.mt-4{
+    width: 100%;
+    overflow-x: auto;
+}
+.mt-4 table{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+@media(max-width:600px)
+{
+#header1 {
+    font-size: 1.5rem;
+}
+.form-container{
+    padding: 10px;
+    margin: 10px auto;
+}
+.table {
+    font-size: 0.9rem;
+}
 }
 
