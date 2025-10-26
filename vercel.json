@@ -9,7 +9,5 @@
     "routes":[{
         "src": "/(.*)", "dest": "main.py"
     }
-    ],
-    "env":{},
-    "pythonVersion":"3.10"
+    ]
 }
