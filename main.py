@@ -17,8 +17,8 @@ weather_options = {
 
 def fetch_coordinates(city):
     geolocator = Nominatim(user_agent="test")
-    location = geolocator.geocode(city)
-    if location:
+    location = geolocator.geocode(city, exactly_one=True)
+    if location and location.raw.get('type')=='city':
         return location.latitude, location.longitude
     else:
         return None, None
