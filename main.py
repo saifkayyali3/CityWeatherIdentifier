@@ -16,12 +16,18 @@ weather_options = {
 }
 
 def fetch_coordinates(city):
-    geolocator = Nominatim(user_agent="test")
-    location = geolocator.geocode(city, exactly_one=True)
-    if location and location.raw.get('type')=='city':
-        return location.latitude, location.longitude
-    else:
+    geolocator = Nominatim(user_agent="City Weather Identifier")
+    location = geolocator.geocode(city)
+    if not location:
         return None, None
+    
+    loc_class=location.raw.get('class', '').lower()
+    loc_type=location.raw.get('type', '').lower()
+
+    if loc_class== "place" and loc_type in ["city", "capital", "metropolis"] \
+        or loc_class=="boundary" and loc_type=="administrative":
+        return location.latitude, location.longitude
+    return None, None
 
 
 def fetch_weather_data(lat, lon, variables):
