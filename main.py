@@ -17,16 +17,27 @@ weather_options = {
 
 def fetch_coordinates(city):
     geolocator = Nominatim(user_agent="City Weather Identifier")
-    location = geolocator.geocode(city)
+    location = geolocator.geocode(city, exactly_one=True, addressdetails=True, extratags=True)
     if not location:
         return None, None
     
-    loc_class=location.raw.get('class', '').lower()
-    loc_type=location.raw.get('type', '').lower()
+    raw=location.raw
+    loc_class=raw.get('class', '').lower()
+    loc_type=raw.get('type', '').lower()
+    extratags = raw.get('extratags') or {}
+    importance = float(raw.get('importance', 0))
+    population = extratags.get('population')
 
-    if loc_class== "place" and loc_type in ["city", "capital", "metropolis"] \
-        or loc_class=="boundary" and loc_type=="administrative":
-        return location.latitude, location.longitude
+    #To convert population safely if population information is available:
+    try:
+        population = int(population) if population else 0
+    except ValueError:
+        population = 0
+
+    if ((loc_class== "place" and loc_type in ["city", "capital", "metropolis"]) or
+        (loc_class=="boundary" and loc_type=="administrative")):
+          if len(city) >= 3 and (population >= 20000 or importance >= 0.3):
+            return location.latitude, location.longitude
     return None, None
 
 
@@ -80,7 +91,7 @@ def index():
         else:
             lat, lon = fetch_coordinates(city)
             if lat is None or lon is None:
-                error = f"Could not find location for '{city}'."
+                error = f"Could not find '{city}', make sure you entered a valid city name or check your spelling"
             else:
                 name=city.title()
                 if option == "Current Temperature":
