@@ -32,21 +32,26 @@ Check out the app here: [City Weather Identifier](https://city-weather-identifie
 
 Follow these steps to run the project locally:
 
+# 1. Clone the repository and enter:
 ```bash
-# 1. **Clone the repository and enter:**
 git clone https://github.com/saifkayyali3/CityWeatherIdentifier.git
 cd CityWeatherIdentifier
-
-# 2. **Make a virtual environment**
+```
+# 2. Make a virtual environment
+```bash
 python -m venv venv
 
 source venv/bin/activate # Linux/macOS
 venv\Scripts\activate # Windows
+```
 
-# 3. **Install the needed requirements**
+# 3. Install the needed requirements
+```bash
 pip install -r requirements.txt
+```
 
-# 4. **Run**
+# 4. Run
+```bash
 python main.py
 
 ```
