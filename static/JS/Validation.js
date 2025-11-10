@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const city = Input.value.trim();
 
         
-        if (!city || !/^[A-Za-z\s]+$/.test(city)) {
+        if (!city || !/^[\p{L}\s,.-]+$/u.test(city)) {
             event.preventDefault(); 
             alert("Please enter a valid city name (letters and spaces only).");
 

@@ -15,7 +15,37 @@ weather_options = {
     "Current Temperature": ["temperature_2m"]
 }
 
+abv_map = {
+    "usa": "United States",
+    "us": "United States",
+    "uk": "United Kingdom",
+    "u.k.": "United Kingdom",
+    "uae": "United Arab Emirates",
+    "ksa": "Saudi Arabia",
+    "saudi": "Saudi Arabia",
+    "prc": "China",
+    "cn": "China",
+    "nz": "New Zealand",
+    "drc": "Democratic Republic of the Congo"
+}
+def normalize_input(city_input):
+    city_input = city_input.strip()
+    city_input_lower = city_input.lower()
+
+    for abv, full in abv_map.items():
+        # Match abbreviation at the end, after a space or comma, or if input is exactly the abbreviation
+        if city_input_lower.endswith(" " + abv) or city_input_lower.endswith("," + abv) or city_input_lower == abv:
+            # Replace only that abbreviation
+            start_index = city_input_lower.rfind(abv)
+            city_input = city_input[:start_index] + full
+            city_input_lower = city_input.lower()  # update lowercase version for further iterations
+
+    return city_input
+
+
+
 def fetch_coordinates(city):
+    city=normalize_input(city)
     geolocator = Nominatim(user_agent="City Weather Identifier")
     location = geolocator.geocode(city, exactly_one=True, addressdetails=True, extratags=True)
     if not location:
