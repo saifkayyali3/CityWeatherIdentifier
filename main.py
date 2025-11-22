@@ -87,6 +87,11 @@ def fetch_hourly_data(lat, lon, variables, hours=24):
         tz_name = "UTC"
     tz = ZoneInfo(tz_name)
     now_local = datetime.now(tz).replace(minute=0, second=0, microsecond=0)
+
+    if now_local.minute >= 30:
+        now_local = (now_local + timedelta(hours=1)).replace(minute=0, second=0, microsecond=0)
+    else:
+        now_local = now_local.replace(minute=0, second=0, microsecond=0)
     
     url = "https://api.open-meteo.com/v1/forecast"
     params = {
