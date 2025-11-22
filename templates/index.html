@@ -41,11 +41,18 @@
         <h3 id="cityname">City name: {{name}}</h3>
         {% endif %}
 
-       {% if table_html %}
-         <div class="mt-4">
-          {{ table_html | safe }}
-         </div>
-        {% endif %}
+        {% if table_html %}
+           {% if option == "Temperature (Across week)" %}
+              <div class="table-vertical mt-4">
+                 {{ table_html | safe }}
+              </div>
+            {% else %}
+              <div class="table-horizontal mt-4">
+                {{ table_html | safe }}
+              </div>
+            {% endif %}
+          {% endif %}
+
          {% if error %}
           <div class="alert alert-danger text-center">{{ error }}</div>
          {% endif %}

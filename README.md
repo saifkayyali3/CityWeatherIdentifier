@@ -6,7 +6,7 @@ A web app that allows users to find detailed weather information for cities acro
 
 ## Features
 
-- Retrieve current temperature or daily weather statistics for any city.
+- Retrieve current temperature or hourly/daily weather statistics for any city.
 - Only valid cities are recognized, avoiding towns, villages, or regions.
 - Responsive design – works on mobile, tablet, and desktop.
 
@@ -21,7 +21,7 @@ Check out the app here: [City Weather Identifier](https://city-weather-identifie
 ## Technologies Used
 
 - **Backend:** Python 3.13, Flask  
-- **APIs:** Geopy (Nominatim), Open-Meteo  
+- **APIs:** Geopy (Nominatim), Open-Meteo, Timezonefinder 
 - **Data Processing:** Pandas  
 - **Frontend:** HTML, CSS, JavaScript, Bootstrap  
 - **Deployment:** Vercel  
