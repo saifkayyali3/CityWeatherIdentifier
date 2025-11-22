@@ -86,7 +86,7 @@ def fetch_hourly_data(lat, lon, variables, hours=24):
     if not tz_name:
         tz_name = "UTC"
     tz = ZoneInfo(tz_name)
-    now_local = datetime.now(tz).replace(minute=0, second=0, microsecond=0)
+    now_local = datetime.now(tz)
 
     if now_local.minute >= 30:
         now_local = (now_local + timedelta(hours=1)).replace(minute=0, second=0, microsecond=0)
