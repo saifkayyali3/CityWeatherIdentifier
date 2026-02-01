@@ -1,4 +1,4 @@
-# City Weather Identifier
+# City Weather Identifier - Final Version (v3)
 
 A web app that allows users to find detailed weather information of their preference for cities across the globe. Built with **Flask**, **HTML/CSS/JS/Bootstrap Styling**, and deployed on **Vercel**.
 
