@@ -1,12 +1,12 @@
 # City Weather Identifier
 
-A web app that allows users to find detailed weather information for cities across the globe. Built with **Flask**, **HTML/CSS/JS/Bootstrap Styling**, and deployed on **Vercel**.
+A web app that allows users to find detailed weather information of their preference for cities across the globe. Built with **Flask**, **HTML/CSS/JS/Bootstrap Styling**, and deployed on **Vercel**.
 
 ---
 
 ## Project History
 This web app is the final version of a three-part evolution:
-1. **[Jordan Weather Legacy v1](https://github.com/Skayyali3/Jordan-Weather-Identifier-v1)** - The Prototype: First Python GUI using static File I/O.
+1. **[Jordan Weather Identifier v1](https://github.com/Skayyali3/Jordan-Weather-Identifier-v1)** - The Prototype: First Python GUI using static File I/O.
 2. **[City Weather Identifier v2](https://github.com/Skayyali3/City-Weather-Identifier-v2)** - Data Viz: Desktop app with live API integration and Seaborn/Matplotlib graphs. 
 3. **City Weather Identifier v3 (This Repo)** - Full-Stack: Responsive web app with Flask backend and Pandas data processing.
 
@@ -15,15 +15,15 @@ This web app is the final version of a three-part evolution:
 ## Features
 
 - Retrieve current temperature or hourly/daily weather statistics for any city.
-- Data Granularity: Unlike v2's weekly overview, v3 provides high-resolution hourly data using Pandas for backend processing
-- Responsive design – works on mobile, tablet, and desktop.
+- Data Granularity: Unlike v2's weekly overview, v3 provides both high-resolution hourly data & high-resolution weekly data using Pandas for backend processing
+- Responsive design: works on mobile, tablet, and desktop.
 - Smart Validation: Filters out non-city regions to ensure data accuracy.
 
 ---
 
 ## Live Demo
 
-Check out the app here: **[City Weather Identifier](https://city-weather-identifier.vercel.app/)**
+Check out the live app here: **[City Weather Identifier](https://city-weather-identifier.vercel.app/)**
 
 ---
 
@@ -60,7 +60,7 @@ pip install -r requirements.txt
 ### 4. Run
 ```bash
 python main.py
-# Open your browser at http://127.0.0.1:5000 to check out the Weather Site Locally for Testing
+# Open your browser to http://127.0.0.1:5000 to check out the Weather Site Locally
 ```
 
 ## License
