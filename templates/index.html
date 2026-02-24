@@ -8,6 +8,7 @@
         <meta name="google-site-verification" content="9CFF2hHOkAER-r2te3p3Vhx6zA2YaOnGzuvKdowu51E" />
         <link rel="canonical" href="https://city-weather-identifier.vercel.app/" />
         <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+        
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -17,16 +18,16 @@
         <meta property="og:description" content="A weather app with the specialty of allowing users to find detailed weather information of cities across the globe based on their preferences.">
         <meta property="og:type" content="website">
         <meta property="og:url" content="https://city-weather-identifier.vercel.app/">
-        <meta property="og:image" content="https://city-weather-identifier.vercel.app/static/images/icon.png">
+        <meta property="og:image" content="{{ url_for('static', filename='images/icon.png') }}">
         <meta property="og:site_name" content="City Weather Identifier">
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:title" content="City Weather Identifier">
         <meta name="twitter:description" content="A weather app with the specialty of allowing users to find detailed weather information of cities across the globe based on their preferences.">
-        <meta name="twitter:image" content="https://city-weather-identifier.vercel.app/static/images/icon.png">
+        <meta name="twitter:image" content="{{ url_for('static', filename='images/icon.png') }}">
 
         <title>City Weather Identifier</title>
         
-        <link rel="icon" href="{{ url_for('static', filename='images/CityWeatherIdentifier.png') }}" type="image/png">
+        <link rel="icon" href="{{ url_for('static', filename='images/icon.png') }}" type="image/png">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="{{ url_for('static', filename='CSS/styles.css') }}">
     </head>
