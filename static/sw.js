@@ -6,7 +6,6 @@ const STATIC_ASSETS = [
   "/static/JS/script.js",
   "/static/images/icon.png",
   "/static/manifest.json",
-  "/static/offline.html"
 ];
 
 self.addEventListener("install", (event) => {
@@ -45,11 +44,6 @@ self.addEventListener("fetch", (event) => {
             return response;
           });
         })
-        .catch(() => {
-          if (event.request.mode === "navigate") {
-            return caches.match("/static/offline.html");
-          }
-        });
     })
   );
 });
