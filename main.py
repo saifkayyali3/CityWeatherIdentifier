@@ -1,6 +1,6 @@
-from flask import Flask, render_template, request, send_from_directory
+from flask import Flask, render_template, request, send_from_directory, Response
 from geopy.geocoders import Nominatim
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 import requests
 import pandas as pd
 from timezonefinder import TimezoneFinder
@@ -86,7 +86,7 @@ def fetch_daily_data(lat, lon, variables):
         return response.json()['daily']
     return None
 
-def fetch_hourly_data(lat, lon, variables, hours=24):
+def fetch_hourly_data(lat, lon, variables):
     tf = TimezoneFinder()
     tz_name = tf.timezone_at(lat=lat, lng=lon)
     if not tz_name:
@@ -106,7 +106,7 @@ def fetch_hourly_data(lat, lon, variables, hours=24):
         "hourly": ",".join(variables),
         "timezone": "auto",
         "start_hour": now_local.strftime("%Y-%m-%dT%H:%M"),
-        "end_hour": (now_local + timedelta(hours=24)).strftime("%Y-%m-%dT%H:%M")
+        "end_hour": (now_local + timedelta(hours = 24)).strftime("%Y-%m-%dT%H:%M")
     }
     response = requests.get(url, params=params)
     if response.status_code == 200:
@@ -198,14 +198,12 @@ def inject_year():
 
 @app.route('/robots.txt')
 def robots_txt():
-    # This sends the file directly from your root directory
     return send_from_directory(os.getcwd(), 'robots.txt')
 
 @app.route('/sitemap.xml')
-def sitemap_xml():
-    return send_from_directory(os.getcwd(), 'sitemap.xml')
-
+def sitemap():
+    urls = [{'loc': 'https://city-weather-identifier.vercel.app/', 'lastmod': datetime.now().date()}]
+    return Response(render_template('sitemap.xml', urls=urls), mimetype='application/xml')
 
 if __name__ == "__main__":
-    app.run(debug=True)
-
+    app.run(debug = True)
