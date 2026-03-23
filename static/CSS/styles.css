@@ -1,13 +1,15 @@
-body{
+body {
     background-color: aqua;
     text-align: center;
     margin: 0;
 }
-#header1{
-color: #004d40;
-font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+
+#header1 {
+    color: #004d40;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
-.form-container{
+
+.form-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -18,100 +20,110 @@ font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans
     box-sizing: border-box;
     gap: 10px;
 }
-#dropdown{
+
+#dropdown {
     display: flex;
     justify-content: center;
 }
-.form-control, .form-select, .btn{
+
+.form-control,
+.form-select,
+.btn {
     width: 100%;
     flex: 1 1 auto;
     min-width: 200px;
     margin: 10px 0;
     box-sizing: border-box;
 }
-#cityname{
+
+#cityname {
     font-family: 'Times New Roman', Times, serif;
-    
 }
 
 .table-horizontal {
     width: 100%;
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch; 
+    -webkit-overflow-scrolling: touch;
 }
 
 .table-horizontal table {
-    min-width: max-content;  
+    min-width: max-content;
     border-collapse: collapse;
 }
+
 .table-vertical {
     width: 100%;
-    overflow-y: auto;  
+    overflow-y: auto;
 }
 
 .site-footer {
-  background-color: white;
-  margin-top: 3rem;
-  padding: 1rem 1.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.9rem;
-  color: #777;
-  border-top: 1px solid #e0e0e0;
+    background-color: white;
+    margin-top: 3rem;
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #777;
+    border-top: 1px solid #e0e0e0;
 }
 
 .footer-left,
 .footer-right {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .site-footer a {
-  color: inherit;
-  text-decoration: none;
-  font-weight: 500;
+    color: inherit;
+    text-decoration: none;
+    font-weight: 500;
 }
 
 .site-footer a:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
 .github-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
 }
 
 .github-icon {
-  width: 16px;
-  height: 16px;
-  fill: currentColor;
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
 }
 
 
-@media(max-width:600px){
+@media(max-width:600px) {
     #header1 {
         font-size: 1.5rem;
     }
-    .form-container{
+
+    .form-container {
         width: 95%;
         padding: 10px;
         margin: 10px auto;
-        flex-direction:column ;
+        flex-direction: column;
     }
-    .form-control,.form-select,.btn{
+
+    .form-control,
+    .form-select,
+    .btn {
         max-width: 100%;
         min-width: auto;
     }
+
     .table {
         font-size: 0.9rem;
     }
+
     .site-footer {
         flex-direction: column;
         gap: 0.5rem;
         text-align: center;
     }
 }
-

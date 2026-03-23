@@ -1,113 +1,119 @@
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="keywords" content="weather, city weather, global cities, temperature, precipitation, forecast, weather identifier, wind speed">
-        <meta name="author" content="Saif Kayyali">
-        <meta name="description" content="A weather app with the specialty of allowing users to find detailed weather information of cities across the globe based on their preferences.">
-        <meta name="google-site-verification" content="9CFF2hHOkAER-r2te3p3Vhx6zA2YaOnGzuvKdowu51E" />
-        <link rel="canonical" href="https://city-weather-identifier.vercel.app/" />
-        <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
-        
-        <meta name="apple-mobile-web-app-capable" content="yes">
-        <meta name="mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-        <meta name="apple-mobile-web-app-title" content="City Weather Identifier">
-        <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/iconx192.png') }}">
 
-        <meta property="og:description" content="A weather app with the specialty of allowing users to find detailed weather information of cities across the globe based on their preferences.">
-        <meta property="og:type" content="website">
-        <meta property="og:url" content="https://city-weather-identifier.vercel.app/">
-        <meta property="og:image" content="{{ url_for('static', filename='images/icon.png') }}">
-        <meta property="og:site_name" content="City Weather Identifier">
-        <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:title" content="City Weather Identifier">
-        <meta name="twitter:description" content="A weather app with the specialty of allowing users to find detailed weather information of cities across the globe based on their preferences.">
-        <meta name="twitter:image" content="{{ url_for('static', filename='images/icon.png') }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="keywords"
+    content="weather, city weather, global cities, temperature, precipitation, forecast, weather identifier, wind speed">
+  <meta name="author" content="Saif Kayyali">
+  <meta name="description"
+    content="A weather app with the specialty of allowing users to find detailed weather information of cities across the globe based on their preferences.">
+  <meta name="google-site-verification" content="9CFF2hHOkAER-r2te3p3Vhx6zA2YaOnGzuvKdowu51E" />
+  <link rel="canonical" href="https://city-weather-identifier.vercel.app/" />
+  <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
 
-        <title>City Weather Identifier</title>
-        
-        <link rel="icon" href="{{ url_for('static', filename='images/icon.png') }}" type="image/png">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="{{ url_for('static', filename='CSS/styles.css') }}">
-    </head>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="City Weather Identifier">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/iconx192.png') }}">
 
-    <body>
-      <h1 id="header1">City Weather Identifier</h1>
+  <meta property="og:description"
+    content="A weather app with the specialty of allowing users to find detailed weather information of cities across the globe based on their preferences.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://city-weather-identifier.vercel.app/">
+  <meta property="og:image" content="{{ url_for('static', filename='images/icon.png') }}">
+  <meta property="og:site_name" content="City Weather Identifier">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="City Weather Identifier">
+  <meta name="twitter:description"
+    content="A weather app with the specialty of allowing users to find detailed weather information of cities across the globe based on their preferences.">
+  <meta name="twitter:image" content="{{ url_for('static', filename='images/icon.png') }}">
+
+  <title>City Weather Identifier</title>
+
+  <link rel="icon" href="{{ url_for('static', filename='images/icon.png') }}" type="image/png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='CSS/styles.css') }}">
+</head>
+
+<body>
+  <h1 id="header1">City Weather Identifier</h1>
+  <br>
+  <hr>
+  <br>
+  <div class="form-container">
+    <form method="POST" class="mb-4" id="form">
+      <label style="font-size: 20px;">Enter City and Country Names <br>
+        (abbreviating long country names allowed):</label>
+      <input id="city" type="text" class="form-control" name="city" placeholder="City, Country">
       <br>
-      <hr>
+      <div class="col-md-4">
+        <select id="dropdown" class="form-select" name="Weather-Details">
+          {% for opt in options %}
+          <option value="{{ opt }}">{{ opt }}</option>
+          {% endfor %}
+        </select>
+      </div>
       <br>
-      <div class="form-container">
-        <form method="POST" class="mb-4" id="form">
-            <label style="font-size: 20px;">Enter City and Country Names <br>
-                (abbreviating long country names allowed):</label>
-            <input id="city" type="text" class="form-control" name="city" placeholder="City, Country"> 
-            <br>
-            <div class="col-md-4">
-            <select id="dropdown" class="form-select" name="Weather-Details">
-              {% for opt in options %}
-               <option value="{{ opt }}">{{ opt }}</option>
-              {% endfor %}
-              </select>
-            </div>
-            <br>
-            <div class="col-md-2">
-              <button id="button" class="btn btn-primary w-100" type="submit">Get Weather</button>
-            </div>
-          </form>
+      <div class="col-md-2">
+        <button id="button" class="btn btn-primary w-100" type="submit">Get Weather</button>
       </div>
-      <div id="textarea">
-        {% if name %} 
-        <h3 id="cityname">City name: <span style="text-decoration: underline;"> {{name}} </span></h3>
-        {% endif %}
+    </form>
+  </div>
+  <div id="textarea">
+    {% if name %}
+    <h3 id="cityname">City name: <span style="text-decoration: underline;"> {{name}} </span></h3>
+    {% endif %}
 
-        {% if table_html %}
-           {% if option == "Temperature (Across week)" %}
-              <div class="table-vertical mt-4">
-                 {{ table_html | safe }}
-              </div>
-            {% else %}
-              <div class="table-horizontal mt-4">
-                {{ table_html | safe }}
-              </div>
-            {% endif %}
-          {% endif %}
+    {% if table_html %}
+    {% if option == "Temperature (Across week)" %}
+    <div class="table-vertical mt-4">
+      {{ table_html | safe }}
+    </div>
+    {% else %}
+    <div class="table-horizontal mt-4">
+      {{ table_html | safe }}
+    </div>
+    {% endif %}
+    {% endif %}
 
-         {% if error %}
-          <div class="alert alert-danger text-center">{{ error }}</div>
-         {% endif %}
-      </div>
-     
-      <footer class="site-footer">
-        <div class="footer-left">
-            <small>© {{ current_year }} City Weather Identifier</small>
-        </div>
+    {% if error %}
+    <div class="alert alert-danger text-center">{{ error }}</div>
+    {% endif %}
+  </div>
 
-        <div class="footer-right">
-            <span>Want to help improve this project?</span>
-            <a href="https://github.com/Skayyali3/City-Weather-Identifier-v3"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="github-link">
+  <footer class="site-footer">
+    <div class="footer-left">
+      <small>© {{ current_year }} City Weather Identifier</small>
+    </div>
 
-                <svg class="github-icon" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M12 0.3a12 12 0 00-3.8 23.4c.6.1.8-.2.8-.5v-1.9c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.9 1.3 3.6 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-5.8 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.4 11.4 0 016 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.9 1.2 3.2 0 4.5-2.8 5.5-5.4 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5A12 12 0 0012 .3z"/>
-                </svg>
+    <div class="footer-right">
+      <span>Want to help improve this project?</span>
+      <a href="https://github.com/Skayyali3/City-Weather-Identifier-v3" target="_blank" rel="noopener noreferrer"
+        class="github-link">
 
-                Contribute on GitHub
-            </a>
-        </div>
+        <svg class="github-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M12 0.3a12 12 0 00-3.8 23.4c.6.1.8-.2.8-.5v-1.9c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.9 1.3 3.6 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.4-1.3-5.4-5.8 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.4 11.4 0 016 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.9 1.2 3.2 0 4.5-2.8 5.5-5.4 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5A12 12 0 0012 .3z" />
+        </svg>
 
-    </footer>
-     
-     
-      <script src="{{ url_for('static', filename='JS/script.js') }}"></script>
-     <script>
-        if ("serviceWorker" in navigator) {
-          window.addEventListener("load", () => {
-            navigator.serviceWorker.register("{{ url_for('static', filename='sw.js') }}").then((reg) => console.log("Service Worker registered.", reg)).catch((err) => console.log("Service Worker registration failed:", err));});
-        }
-      </script>
+        Contribute on GitHub
+      </a>
+    </div>
 
-   </body>
+  </footer>
+
+
+  <script src="{{ url_for('static', filename='JS/script.js') }}"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("{{ url_for('static', filename='sw.js') }}").then((reg) => console.log("Service Worker registered.", reg)).catch((err) => console.log("Service Worker registration failed:", err));
+      });
+    }
+  </script>
+
+</body>
+
 </html>

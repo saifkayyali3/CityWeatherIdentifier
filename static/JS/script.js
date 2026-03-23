@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', (event) => {
         const city = Input.value.trim();
 
-        
         if (!city || !/^[\p{L}\s,.-]+$/u.test(city)) {
             event.preventDefault(); 
             alert("Please enter a valid city name (letters and spaces only).");
@@ -23,13 +22,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         submit.disabled = true;
         submit.textContent = "Loading...";
-
     });
 });
 
 document.addEventListener("DOMContentLoaded", function(){
     const table=document.getElementById("table");
-    if (table){
+    if (table) {
         table.scrollIntoView({behavior:"smooth"});
     }
 });
