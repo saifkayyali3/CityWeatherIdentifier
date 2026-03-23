@@ -9,6 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     form.addEventListener('submit', (event) => {
         const city = Input.value.trim();
+        const submitter = event.submitter;
+
+        if (!submitter) return;
+
+        if (submitter.tagName === "BUTTON" && submitter.name === "recentCity") return;
 
         if (!city || !/^[\p{L}\s,.-]+$/u.test(city)) {
             event.preventDefault(); 
@@ -25,9 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-document.addEventListener("DOMContentLoaded", function(){
+document.addEventListener("DOMContentLoaded", () => {
     const table=document.getElementById("table");
     if (table) {
-        table.scrollIntoView({behavior:"smooth"});
+        table.scrollIntoView({behavior: "smooth"});
     }
 });

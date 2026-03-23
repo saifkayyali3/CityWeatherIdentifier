@@ -15,3 +15,5 @@ desktop.ini
 # IDE files
 .vscode/
 
+# Environment Variables/Secret keys
+*.env

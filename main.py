@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_from_directory, Response
+from flask import Flask, render_template, request, send_from_directory, Response, session
 from geopy.geocoders import Nominatim
 from datetime import datetime, timedelta
 import requests
@@ -6,8 +6,14 @@ import pandas as pd
 from timezonefinder import TimezoneFinder
 from zoneinfo import ZoneInfo
 import os
+from dotenv import load_dotenv
 
+load_dotenv()
 app = Flask(__name__)
+app.secret_key = os.getenv("SECRET_KEY")
+
+if not app.secret_key:
+    raise ValueError("Set a secret key in a .env file and keep the .env file in .gitignore (format: SECRET_KEY=abc123)\nWARNING: replace abc123 with a real randomly generated secret key and make it long")
 
 class hourly:
     def __init__(self, lat, lon, variables):
@@ -210,17 +216,28 @@ def index():
     error = None
     name = None
     if request.method == "POST":
-        city = (request.form.get("city") or "").strip() 
+        city = (request.form.get("city") or request.form.get("recentCity") or "").strip() 
         option = request.form.get("Weather-Details")
         
         if not city:
-            error = "Please enter city name"
+            error = "Please enter a city name"
         else:
             lat, lon = fetch_coordinates(city)
             if lat is None or lon is None:
                 error = f"Could not find '{city}', make sure you entered a valid city name or check your spelling"
             else:
                 name = city.title()
+
+                if "recent_cities" not in session:
+                    session["recent_cities"] = []
+                
+                cities = session["recent_cities"]
+
+                if name in cities:
+                    cities.remove(name)
+
+                cities.insert(0, name)
+                session["recent_cities"] = cities[:5]
                 if option == "Current Temperature":
                     weather = current(lat, lon)
                     data = weather.get_data()
@@ -238,7 +255,7 @@ def index():
 
                 if htmlTable is None:
                     error = "Failed to retrieve weather data."
-    return render_template("index.html", options=weather_options.keys(), htmlTable = htmlTable, error = error, name = name)
+    return render_template("index.html", options = weather_options.keys(), htmlTable = htmlTable, error = error, name = name, recent_cities = session.get("recent_cities", []))
 
 @app.context_processor
 def inject_year():
