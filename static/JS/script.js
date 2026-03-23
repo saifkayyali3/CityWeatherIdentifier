@@ -28,9 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
         submit.disabled = true;
         submit.textContent = "Loading...";
     });
-});
 
-document.addEventListener("DOMContentLoaded", () => {
     const table=document.getElementById("table");
     if (table) {
         table.scrollIntoView({behavior: "smooth"});
