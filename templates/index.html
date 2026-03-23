@@ -66,14 +66,14 @@
     <h3 id="cityname">City name: <span style="text-decoration: underline;"> {{name}} </span></h3>
     {% endif %}
 
-    {% if table_html %}
+    {% if htmlTable %}
     {% if option == "Temperature (Across week)" %}
     <div class="table-vertical mt-4">
-      {{ table_html | safe }}
+      {{ htmlTable | safe }}
     </div>
     {% else %}
     <div class="table-horizontal mt-4">
-      {{ table_html | safe }}
+      {{ htmlTable | safe }}
     </div>
     {% endif %}
     {% endif %}

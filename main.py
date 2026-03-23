@@ -9,6 +9,91 @@ import os
 
 app = Flask(__name__)
 
+class hourly:
+    def __init__(self, lat, lon, variables):
+        self.lat = lat
+        self.lon = lon
+        self.variables = variables
+
+    def get_data(self):
+        return fetch_hourly_data(self.lat, self.lon, self.variables)
+
+    def format(self, data):
+        if not data:
+            return None
+
+        df = pd.DataFrame(data)
+        df['time'] = df['time'].str.replace('T', ' ')
+        df['time'] = pd.to_datetime(df['time']).dt.strftime('%Y-%m-%d %H:%M')
+        df = df.set_index('time').T
+
+        rename = {
+            "temperature_2m": "Temperature (°C)",
+            "precipitation": "Precipitation (mm)",
+            "rain": "Rain (mm)",
+            "snowfall": "Snowfall (mm)",
+            "showers": "Showers (mm)",
+            "windspeed_10m": "Wind Speed (km/h)"
+        }
+
+        df.columns.name = "Time"
+        df.index = [rename.get(i, i) for i in df.index]
+
+        return df.to_html(table_id = "table", classes = "table table-striped table-bordered")
+    
+class daily:
+    def __init__(self, lat, lon, variables):
+        self.lat = lat
+        self.lon = lon
+        self.variables = variables
+
+    def get_data(self):
+        return fetch_daily_data(self.lat, self.lon, self.variables)
+
+    def format(self, data):
+        if not data:
+            return None
+
+        df = pd.DataFrame(data)
+
+        rename = {
+            "temperature_2m_max": "Maximum Temperature (°C)",
+            "temperature_2m_min": "Minimum Temperature (°C)",
+            "rain_sum": "Total Rain (mm)",
+            "windspeed_10m_max": "Maximum Wind Speed (km/h)",
+            "windspeed_10m_min": "Minimum Wind Speed (km/h)",
+            "snowfall_sum": "Total Snowfall (mm)",
+            "precipitation_sum": "Total Precipitation (mm)",
+            "showers_sum": "Total Showers (mm)",
+            "time": "Date"
+        }
+
+        df.rename(columns = rename, inplace = True)
+
+        return df.to_html(table_id = "table", classes = "table table-striped table-bordered", index = False)
+    
+class current:
+    def __init__(self, lat, lon):
+        self.lat = lat
+        self.lon = lon
+
+    def get_data(self):
+        return fetch_current_temperature(self.lat, self.lon)
+
+    def format(self, data, city_name):
+        if not data:
+            return None
+
+        temp, apparent = data
+
+        return (
+            f"<div class='alert alert-info' style='text-align: center; border-radius: 15px;'>"
+            f"<h4>Current weather in {city_name}:</h4>"
+            f"<p style='font-size: 1.5rem; margin-bottom: 0;'><strong>{temp}°C</strong></p>"
+            f"<p style='font-size: 1rem; color: #555;'>Feels like: <strong>{apparent}°C</strong></p>"
+            f"</div>"
+        )
+
 weather_options = {
     "Current Temperature": ["temperature_2m", "apparent_temperature"],
     "Temperature (Across week)": ["temperature_2m_max", "temperature_2m_min"],
@@ -24,7 +109,7 @@ weather_options = {
     "Showers (Across Week)": ["showers_sum"],
 }
 
-abv_map = {
+abrvMap = {
     "usa": "United States",
     "us": "United States",
     "uk": "United Kingdom",
@@ -38,15 +123,15 @@ abv_map = {
     "drc": "Democratic Republic of the Congo"
 }
 
-def normalize_input(city_input):
-    city_input = city_input.strip()
-    city_input_lower = city_input.lower()
-    for abv, full in abv_map.items():
-        if city_input_lower.endswith(" " + abv) or city_input_lower.endswith("," + abv) or city_input_lower == abv:
-            start_index = city_input_lower.rfind(abv)
-            city_input = city_input[:start_index] + full
-            city_input_lower = city_input.lower()
-    return city_input
+def normalize_input(cityInput):
+    cityInput = cityInput.strip()
+    cityInput_lower = cityInput.lower()
+    for abv, full in abrvMap.items():
+        if cityInput_lower.endswith(" " + abv) or cityInput_lower.endswith("," + abv) or cityInput_lower == abv:
+            start_index = cityInput_lower.rfind(abv)
+            cityInput = cityInput[:start_index] + full
+            cityInput_lower = cityInput.lower()
+    return cityInput
 
 def fetch_coordinates(city):
     city = normalize_input(city)
@@ -56,8 +141,8 @@ def fetch_coordinates(city):
         return None, None
     
     raw = location.raw
-    loc_class = raw.get('class', '').lower()
-    loc_type = raw.get('type', '').lower()
+    locClass = raw.get('class', '').lower()
+    locType = raw.get('type', '').lower()
     extratags = raw.get('extratags') or {}
     importance = float(raw.get('importance', 0))
     population = extratags.get('population')
@@ -67,8 +152,8 @@ def fetch_coordinates(city):
     except ValueError:
         population = 0
     
-    if ((loc_class == "place" and loc_type in ["city", "capital", "metropolis"]) or
-        (loc_class == "boundary" and loc_type == "administrative")):
+    if ((locClass == "place" and locType in ["city", "capital", "metropolis"]) or
+        (locClass == "boundary" and locType == "administrative")):
         if len(city) >= 3 and (population >= 20000 or importance >= 0.3):
             return location.latitude, location.longitude
     return None, None
@@ -87,17 +172,17 @@ def fetch_daily_data(lat, lon, variables):
     return None
 
 def fetch_hourly_data(lat, lon, variables):
-    tf = TimezoneFinder()
-    tz_name = tf.timezone_at(lat=lat, lng=lon)
-    if not tz_name:
-        tz_name = "UTC"
-    tz = ZoneInfo(tz_name)
-    now_local = datetime.now(tz)
+    tzf = TimezoneFinder()
+    tzName = tzf.timezone_at(lat=lat, lng=lon)
+    if not tzName:
+        tzName = "UTC"
+    tz = ZoneInfo(tzName)
+    nowLocal = datetime.now(tz)
 
-    if now_local.minute >= 30:
-        now_local = (now_local + timedelta(hours=1)).replace(minute=0, second=0, microsecond=0)
+    if nowLocal.minute >= 30:
+        nowLocal = (nowLocal + timedelta(hours=1)).replace(minute = 0, second = 0, microsecond = 0)
     else:
-        now_local = now_local.replace(minute=0, second=0, microsecond=0)
+        nowLocal = nowLocal.replace(minute = 0, second = 0, microsecond = 0)
     
     url = "https://api.open-meteo.com/v1/forecast"
     params = {
@@ -105,27 +190,27 @@ def fetch_hourly_data(lat, lon, variables):
         "longitude": lon,
         "hourly": ",".join(variables),
         "timezone": "auto",
-        "start_hour": now_local.strftime("%Y-%m-%dT%H:%M"),
-        "end_hour": (now_local + timedelta(hours = 24)).strftime("%Y-%m-%dT%H:%M")
+        "start_hour": nowLocal.strftime("%Y-%m-%dT%H:%M"),
+        "end_hour": (nowLocal + timedelta(hours = 24)).strftime("%Y-%m-%dT%H:%M")
     }
-    response = requests.get(url, params=params)
+    response = requests.get(url, params = params)
     if response.status_code == 200:
         return response.json().get("hourly")
     return None
 
 def fetch_current_temperature(lat, lon):
-    data = fetch_hourly_data(lat, lon, ["temperature_2m", "apparent_temperature"], hours=1)
+    data = fetch_hourly_data(lat, lon, ["temperature_2m", "apparent_temperature"])
     if data and "temperature_2m" in data and "apparent_temperature" in data:
         return data["temperature_2m"][0], data["apparent_temperature"][0]
     return None
 
 @app.route('/', methods=["POST", "GET"])
 def index():
-    table_html = None
+    htmlTable = None
     error = None
     name = None
     if request.method == "POST":
-        city = request.form.get("city").strip()
+        city = (request.form.get("city") or "").strip() 
         option = request.form.get("Weather-Details")
         
         if not city:
@@ -137,67 +222,30 @@ def index():
             else:
                 name = city.title()
                 if option == "Current Temperature":
-                    temp, apparent = fetch_current_temperature(lat, lon)
-                    if temp is not None:
-                        table_html = (
-                            f"<div class='alert alert-info' style='text-align: center; border-radius: 15px;'>"
-                            f"<h4>Current weather in {name}:</h4>"
-                            f"<p style='font-size: 1.5rem; margin-bottom: 0;'><strong>{temp}°C</strong></p>"
-                            f"<p style='font-size: 1rem; color: #555;'>Feels like: <strong>{apparent}°C</strong></p>"
-                            f"</div>")
-                    else:
-                        error = "Current temperature not available."
+                    weather = current(lat, lon)
+                    data = weather.get_data()
+                    htmlTable = weather.format(data, name)
+
                 elif "Hourly" in option:
-                    variables = weather_options[option]
-                    data = fetch_hourly_data(lat, lon, variables, hours=24)
-                    if data:
-                        df = pd.DataFrame(data)
-                        df['time'] = df['time'].str.replace('T', ' ')
-                        df['time'] = pd.to_datetime(df['time']).dt.strftime('%Y-%m-%d %H:%M')
-                        
-                        rename = {
-                            "temperature_2m": "Temperature (°C)",
-                            "precipitation": "Precipitation (mm)",
-                            "rain": "Rain (mm)",
-                            "snowfall": "Snowfall (mm)",
-                            "showers": "Showers (mm)",
-                            "windspeed_10m": "Wind Speed (km/h)",
-                            "time": "Date & Time"
-                        }
-                        
-                        df = df.set_index('time').T
-                        df.index = [rename.get(v, v) for v in df.index]
-                        table_html = df.to_html(table_id="table", classes="table table-striped table-bordered")
-                    else:
-                        error = "Failed to retrieve hourly weather data."
+                    weather = hourly(lat, lon, weather_options[option])
+                    data = weather.get_data()
+                    htmlTable = weather.format(data)
+
                 else:
-                    variables = weather_options[option]
-                    data = fetch_daily_data(lat, lon, variables)
-                    if data:
-                        df = pd.DataFrame(data)
-                        rename = {
-                            "temperature_2m_max": "Maximum Temperature (°C)",
-                            "temperature_2m_min": "Minimum Temperature (°C)",
-                            "rain_sum": "Total Rain (mm)",
-                            "windspeed_10m_max": "Maximum Wind Speed (km/h)",
-                            "windspeed_10m_min": "Minimum Wind Speed (km/h)",
-                            "snowfall_sum": "Total Snowfall (mm)",
-                            "precipitation_sum": "Total Precipitation (mm)",
-                            "showers_sum": "Total Showers (mm)",
-                            "time": "Date"
-                        }
-                        df.rename(columns=rename, inplace=True)
-                        table_html = df.to_html(table_id="table", classes="table table-striped table-bordered", index=False)
-                    else:
-                        error = "Failed to retrieve weather data."
-    return render_template("index.html", options=weather_options.keys(), table_html=table_html, error=error, name=name)
+                    weather = daily(lat, lon, weather_options[option])
+                    data = weather.get_data()
+                    htmlTable = weather.format(data)
+
+                if htmlTable is None:
+                    error = "Failed to retrieve weather data."
+    return render_template("index.html", options=weather_options.keys(), htmlTable = htmlTable, error = error, name = name)
 
 @app.context_processor
 def inject_year():
     return {"current_year": datetime.now().year}
 
 @app.route('/robots.txt')
-def robots_txt():
+def robotsTxt():
     return send_from_directory(os.getcwd(), 'robots.txt')
 
 @app.route('/sitemap.xml')
