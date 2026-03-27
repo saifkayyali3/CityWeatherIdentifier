@@ -2,8 +2,8 @@ const CACHE_NAME = "cweather-cache-v1";
 
 const STATIC_ASSETS = [
   "/",
-  "/static/CSS/styles.css",
-  "/static/JS/script.js",
+  "/static/css/styles.css",
+  "/static/js/script.js",
   "/static/images/icon.png",
   "/static/manifest.json",
 ];

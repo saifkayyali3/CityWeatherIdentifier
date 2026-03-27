@@ -6,17 +6,20 @@ A web app that allows users to find detailed weather information of their prefer
 
 ## Project History
 This web app is the final version of a three-part evolution:
-1. **[Jordan Weather Identifier v1](https://github.com/Skayyali3/Jordan-Weather-Identifier-v1)** - The Prototype: First Python GUI using static File I/O.
-2. **[City Weather Identifier v2](https://github.com/Skayyali3/City-Weather-Identifier-v2)** - Data Viz: Desktop app with live API integration and Seaborn/Matplotlib graphs. 
-3. **City Weather Identifier v3 (This Repo)** - Full-Stack: Responsive web app with Flask backend and Pandas data processing.
+1. **[Jordan Weather Identifier v1](https://github.com/Skayyali3/Jordan-Weather-Identifier-v1)** 
+    - The Prototype: First Python GUI using static file I/O.
+2. **[City Weather Identifier v2](https://github.com/Skayyali3/City-Weather-Identifier-v2)** 
+    - Data Visualizer: Desktop app with live API integration and Seaborn/Matplotlib graphs. 
+3. **City Weather Identifier v3 (This Repo)** 
+    - Full-Stack: Responsive web app with Flask backend, Pandas data processing and responsive design.
 
 ---
 
 ## Features
 
 - Retrieve current temperature or hourly/daily weather statistics for any city.
-- Data Granularity: Unlike v2's weekly overview, v3 provides both high-resolution hourly data & high-resolution weekly data using Pandas for backend processing
-- Responsive design: works on mobile, tablet, and desktop.
+- Data Customizability: Unlike v2's weekly overview, v3 provides both high-resolution hourly data & high-resolution weekly data using Pandas for backend processing
+- Responsive design: works on mobile, tablet and desktop.
 - Smart Validation: Filters out non-city regions to ensure data accuracy.
 
 ---

@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!form || !submit || !Input) return;
 
-    const text = submit.textContent; 
+    const text = submit.textContent;
 
     form.addEventListener('submit', (event) => {
         const city = Input.value.trim();
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (submitter.tagName === "BUTTON" && submitter.name === "recentCity") return;
 
         if (!city || !/^[\p{L}\s,.-]+$/u.test(city)) {
-            event.preventDefault(); 
+            event.preventDefault();
             alert("Please enter a valid city name (letters and spaces only).");
 
             submit.disabled = false;
@@ -25,12 +25,12 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        submit.classList.add('is-loading');
         submit.disabled = true;
-        submit.textContent = "Loading...";
     });
 
-    const table=document.getElementById("table");
+    const table = document.getElementById("table");
     if (table) {
-        table.scrollIntoView({behavior: "smooth"});
+        table.scrollIntoView({ behavior: "smooth" });
     }
 });

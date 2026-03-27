@@ -262,7 +262,7 @@ def inject_year():
     return {"current_year": datetime.now().year}
 
 @app.route('/robots.txt')
-def robotsTxt():
+def robots_txt():
     return send_from_directory(os.getcwd(), 'robots.txt')
 
 @app.route('/sitemap.xml')

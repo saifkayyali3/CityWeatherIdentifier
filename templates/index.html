@@ -39,34 +39,36 @@
 
 <body>
   <h1 id="header1">City Weather Identifier</h1>
-  <hr>  <br>
+  <hr> <br>
   <div class="form-container">
     <form method="POST" class="mb-4" id="form">
       <label style="font-size: 20px;">Enter City and Country Names <br>
         (abbreviating long country names allowed):
       </label>
       {% if recent_cities %}
-        <div>
-          <h5>Recent Cities:</h5>
-          {% for city in recent_cities %}
-            <button type="submit" name="recentCity" value="{{ city }}">
-              {{ city }}
-            </button>
-          {% endfor %}
-        </div>
+      <div>
+        <h5>Recent Cities:</h5>
+        {% for city in recent_cities %}
+        <button type="submit" name="recentCity" value="{{ city }}">
+          {{ city }}
+        </button>
+        {% endfor %}
+      </div>
       {% endif %}
       <input id="city" type="text" class="form-control" name="city" placeholder="City, Country" value="{{name or '' }}">
       <br>
       <div class="col-md-4">
         <select id="dropdown" class="form-select" name="Weather-Details">
           {% for opt in options %}
-            <option value="{{ opt }}">{{ opt }}</option>
+          <option value="{{ opt }}">{{ opt }}</option>
           {% endfor %}
         </select>
       </div>
       <br>
       <div class="col-md-2">
-        <button id="button" class="btn btn-primary w-100" type="submit">Get Weather</button>
+        <button id="button" class="btn btn-primary w-100" type="submit">
+          <span class="button-text">Get Weather</span>
+        </button>
       </div>
     </form>
   </div>
@@ -78,12 +80,12 @@
     {% if htmlTable %}
       {% if option == "Temperature (Across week)" %}
         <div class="table-vertical mt-4">
-        {{ htmlTable | safe }}
+          {{ htmlTable | safe }}
         </div>
       {% else %}
-      <div class="table-horizontal mt-4">
-        {{ htmlTable | safe }}
-      </div>
+        <div class="table-horizontal mt-4">
+          {{ htmlTable | safe }}
+        </div>
       {% endif %}
     {% endif %}
 
