@@ -46,10 +46,10 @@
         (abbreviating long country names allowed):
       </label>
       {% if recent_cities %}
-      <div>
+      <div class="mt-2">
         <h5>Recent Cities:</h5>
         {% for city in recent_cities %}
-        <button type="submit" name="recentCity" value="{{ city }}">
+        <button type="button" name="recentCity" data-city="{{ city }}" class="recent-city-btn">
           {{ city }}
         </button>
         {% endfor %}
@@ -57,19 +57,15 @@
       {% endif %}
       <input id="city" type="text" class="form-control" name="city" placeholder="City, Country" value="{{name or '' }}">
       <br>
-      <div class="col-md-4">
-        <select id="dropdown" class="form-select" name="Weather-Details">
-          {% for opt in options %}
-          <option value="{{ opt }}">{{ opt }}</option>
-          {% endfor %}
-        </select>
-      </div>
+      <select id="dropdown" class="form-select" name="Weather-Details">
+        {% for opt in options %}
+        <option value="{{ opt }}">{{ opt }}</option>
+        {% endfor %}
+      </select>
       <br>
-      <div class="col-md-2">
-        <button id="button" class="btn btn-primary w-100" type="submit">
-          <span class="button-text">Get Weather</span>
-        </button>
-      </div>
+      <button type="submit" id="button" class="btn btn-primary w-100">
+        <span class="button-text">Get Weather</span>
+      </button>
     </form>
   </div>
   <div id="textarea">
