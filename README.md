@@ -9,9 +9,9 @@ This web app is the final version of a three-part evolution:
 1. **[Jordan Weather Identifier v1](https://github.com/Skayyali3/Jordan-Weather-Identifier-v1)** 
     - The Prototype: First Python GUI using static file I/O.
 2. **[City Weather Identifier v2](https://github.com/Skayyali3/City-Weather-Identifier-v2)** 
-    - Data Visualizer: Desktop app with live API integration and Seaborn/Matplotlib graphs. 
+    - Data Visualizer: Desktop GUI with live API integration and Seaborn/Matplotlib graphs via Pandas data processing. 
 3. **City Weather Identifier v3 (This Repo)** 
-    - Full-Stack: Responsive web app with Flask backend, Pandas data processing and responsive design.
+    - Full-Stack: Responsive web app with Flask backend, Pandas data processing and more customizable options.
 
 ---
 
@@ -72,5 +72,3 @@ This project is licensed under the MIT License – see the **[license file](LICE
 
 ## Author
 **Saif Kayyali**
-
-
