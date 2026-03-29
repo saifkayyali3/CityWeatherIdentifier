@@ -8,8 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const text = submit.textContent;
 
-    input.focus();
-
     form.addEventListener('submit', (event) => {
         const city = input.value.trim();
         const submitter = event.submitter;
@@ -34,7 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', () => {
             const selected = btn.getAttribute('data-city');
             input.value = selected;
-            input.focus();
         });
     });
 

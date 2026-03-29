@@ -1,17 +1,17 @@
 # City Weather Identifier - Final Version (v3)
 
-A web app that allows users to find detailed weather information of their preference for cities across the globe. Built with **Flask**, **HTML/CSS/JS/Bootstrap Styling**, and deployed on **Vercel**.
+A web app that allows users to find detailed weather information of their preference for cities across the globe. Built using **Flask** for the backend and **HTML/CSS/JS** for frontend with **Bootstrap** for styling too; deployed on **Vercel**.
 
 ---
 
 ## Project History
 This web app is the final version of a three-part evolution:
 1. **[Jordan Weather Identifier v1](https://github.com/Skayyali3/Jordan-Weather-Identifier-v1)** 
-    - The Prototype: First Python GUI using static file I/O.
+    - The Prototype: First Python GUI using static text file I/O.
 2. **[City Weather Identifier v2](https://github.com/Skayyali3/City-Weather-Identifier-v2)** 
-    - Data Visualizer: Desktop GUI with live API integration and Seaborn/Matplotlib graphs via Pandas data processing. 
+    - Data Visualizer: Desktop GUI with live API integration, and Seaborn/Matplotlib graphs via Pandas data processing. 
 3. **City Weather Identifier v3 (This Repo)** 
-    - Full-Stack: Responsive web app with Flask backend, Pandas data processing and more customizable options.
+    - Full-Stack: Responsive web app with Flask backend, Pandas data processing to produce responsive tables, and more customizable options.
 
 ---
 
@@ -21,6 +21,7 @@ This web app is the final version of a three-part evolution:
 - Data Customizability: Unlike v2's weekly overview, v3 provides both high-resolution hourly data & high-resolution weekly data using Pandas for backend processing
 - Responsive design: works on mobile, tablet and desktop.
 - Smart Validation: Filters out non-city regions to ensure data accuracy.
+- Memory: Saves and shows the last 5 cities a user entered as options to simplify rewriting the city's name (Say you check Amman's temp daily, this simplifies the process)
 
 ---
 
@@ -35,7 +36,7 @@ Check out the live app here: **[City Weather Identifier](https://city-weather-id
 - **Backend:** Python 3.13, Flask  
 - **APIs:** Geopy (Nominatim), Open-Meteo, Timezonefinder 
 - **Data Processing:** Pandas  
-- **Frontend:** HTML, CSS, JavaScript, Bootstrap  
+- **Frontend:** HTML, CSS and JavaScript with Bootstrap simplifying the styling process
 - **Deployment:** Vercel  
 
 ---
