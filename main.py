@@ -16,18 +16,25 @@ app.secret_key = os.getenv("SECRET_KEY")
 if not app.secret_key:
     raise ValueError("Set a secret key in a .env file and keep the .env file in .gitignore (format: SECRET_KEY=abc123)\nWARNING: replace abc123 with a real randomly generated secret key and make it long")
 
-class Hourly:
+class Weather:
     def __init__(self, lat, lon, variables):
         self.lat = lat
         self.lon = lon
         self.variables = variables
+    
+    def get_data(self):
+        raise NotImplementedError
+    
+    def format(self, data, name = None):
+        raise NotImplementedError
 
+        
+class Hourly(Weather):
     def get_data(self):
         return fetch_hourly_data(self.lat, self.lon, self.variables)
 
-    def format(self, data):
-        if not data:
-            return None
+    def format(self, data, name = None):
+        if not data: return None
 
         df = pd.DataFrame(data)
         df['time'] = df['time'].str.replace('T', ' ')
@@ -48,16 +55,11 @@ class Hourly:
 
         return df.to_html(table_id = "table", classes = "table table-striped table-bordered")
     
-class Daily:
-    def __init__(self, lat, lon, variables):
-        self.lat = lat
-        self.lon = lon
-        self.variables = variables
-
+class Daily(Weather):
     def get_data(self):
         return fetch_daily_data(self.lat, self.lon, self.variables)
 
-    def format(self, data):
+    def format(self, data, name = None):
         if not data:
             return None
 
@@ -79,15 +81,14 @@ class Daily:
 
         return df.to_html(table_id = "table", classes = "table table-striped table-bordered", index = False)
     
-class Current:
+class Current(Weather):
     def __init__(self, lat, lon):
-        self.lat = lat
-        self.lon = lon
+        super().__init__(lat, lon, ["temperature_2m", "apparent_temperature"])
 
     def get_data(self):
         return fetch_current_temperature(self.lat, self.lon)
 
-    def format(self, data, city_name):
+    def format(self, data, name):
         if not data:
             return None
 
@@ -95,7 +96,7 @@ class Current:
 
         return (
             f"<div class='alert alert-info' style='text-align: center; border-radius: 15px;'>"
-            f"<h4>Current weather in {city_name}:</h4>"
+            f"<h4>Current weather in {name}:</h4>"
             f"<p style='font-size: 1.5rem; margin-bottom: 0;'><strong>{temp}°C</strong></p>"
             f"<p style='font-size: 1rem; color: #555;'>Feels like: <strong>{apparent}°C</strong></p>"
             f"</div>"
