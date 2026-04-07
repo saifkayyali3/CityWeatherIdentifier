@@ -235,8 +235,7 @@ def index():
             else:
                 name = city.title()
 
-                if "recent_cities" not in session:
-                    session["recent_cities"] = []
+                if "recent_cities" not in session: session["recent_cities"] = []
                 
                 cities = session["recent_cities"]
 
@@ -245,20 +244,18 @@ def index():
 
                 cities.insert(0, name)
                 session["recent_cities"] = cities[:5]
+
                 if option == "Current Temperature":
                     weather = Current(lat, lon)
-                    data = weather.get_data()
-                    htmlTable = weather.format(data, name)
 
                 elif "Hourly" in option:
                     weather = Hourly(lat, lon, weather_options[option])
-                    data = weather.get_data()
-                    htmlTable = weather.format(data)
 
                 else:
                     weather = Daily(lat, lon, weather_options[option])
-                    data = weather.get_data()
-                    htmlTable = weather.format(data)
+
+                data = weather.get_data()
+                htmlTable = weather.format(data, name) if data else None
 
                 if htmlTable is None:
                     error = "Failed to retrieve weather data."
