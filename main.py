@@ -166,6 +166,16 @@ def fetch_coordinates(city):
             return location.latitude, location.longitude
     return None, None
 
+def request_data(url, params, key):
+    for i in range(1, 4):
+        try:
+            response = requests.get(url, params=params)
+            if response.status_code == 200:
+                return response.json()[key]
+        except requests.RequestException as e:
+            print(f"On attempt {i}: Exception caught:", e)
+        time.sleep(1)
+
 def fetch_daily_data(lat, lon, variables):
     url = "https://api.open-meteo.com/v1/forecast"
     params = {
@@ -174,18 +184,13 @@ def fetch_daily_data(lat, lon, variables):
         "daily": ",".join(variables),
         "timezone": "auto"
     }
-    for i in range(3):
-        response = requests.get(url, params=params)
-        if response.status_code == 200:
-            return response.json()['daily']
-        time.sleep(1)
+    request_data(url, params, "daily")
     return None
 
 def fetch_hourly_data(lat, lon, variables):
     tzf = TimezoneFinder()
-    tzName = tzf.timezone_at(lat=lat, lng=lon)
-    if not tzName:
-        tzName = "UTC"
+    tzName = tzf.timezone_at(lat = lat, lng = lon)
+    if not tzName: tzName = "UTC"
     tz = ZoneInfo(tzName)
     nowLocal = datetime.now(tz)
 
@@ -204,11 +209,7 @@ def fetch_hourly_data(lat, lon, variables):
         "end_hour": (nowLocal + timedelta(hours = 24)).strftime("%Y-%m-%dT%H:%M")
     }
 
-    for i in range(3):
-        response = requests.get(url, params=params)
-        if response.status_code == 200:
-            return response.json().get("hourly")
-        time.sleep(1)
+    request_data(url, params, "hourly")
     return None
 
 def fetch_current_temperature(lat, lon):
