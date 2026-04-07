@@ -7,6 +7,7 @@ from timezonefinder import TimezoneFinder
 from zoneinfo import ZoneInfo
 import os
 from dotenv import load_dotenv
+import time
 
 load_dotenv()
 app = Flask(__name__)
@@ -15,7 +16,7 @@ app.secret_key = os.getenv("SECRET_KEY")
 if not app.secret_key:
     raise ValueError("Set a secret key in a .env file and keep the .env file in .gitignore (format: SECRET_KEY=abc123)\nWARNING: replace abc123 with a real randomly generated secret key and make it long")
 
-class hourly:
+class Hourly:
     def __init__(self, lat, lon, variables):
         self.lat = lat
         self.lon = lon
@@ -47,7 +48,7 @@ class hourly:
 
         return df.to_html(table_id = "table", classes = "table table-striped table-bordered")
     
-class daily:
+class Daily:
     def __init__(self, lat, lon, variables):
         self.lat = lat
         self.lon = lon
@@ -78,7 +79,7 @@ class daily:
 
         return df.to_html(table_id = "table", classes = "table table-striped table-bordered", index = False)
     
-class current:
+class Current:
     def __init__(self, lat, lon):
         self.lat = lat
         self.lon = lon
@@ -172,9 +173,11 @@ def fetch_daily_data(lat, lon, variables):
         "daily": ",".join(variables),
         "timezone": "auto"
     }
-    response = requests.get(url, params=params)
-    if response.status_code == 200:
-        return response.json()['daily']
+    for i in range(3):
+        response = requests.get(url, params=params)
+        if response.status_code == 200:
+            return response.json()['daily']
+        time.sleep(1)
     return None
 
 def fetch_hourly_data(lat, lon, variables):
@@ -199,9 +202,12 @@ def fetch_hourly_data(lat, lon, variables):
         "start_hour": nowLocal.strftime("%Y-%m-%dT%H:%M"),
         "end_hour": (nowLocal + timedelta(hours = 24)).strftime("%Y-%m-%dT%H:%M")
     }
-    response = requests.get(url, params = params)
-    if response.status_code == 200:
-        return response.json().get("hourly")
+
+    for i in range(3):
+        response = requests.get(url, params=params)
+        if response.status_code == 200:
+            return response.json().get("hourly")
+        time.sleep(1)
     return None
 
 def fetch_current_temperature(lat, lon):
@@ -239,27 +245,28 @@ def index():
                 cities.insert(0, name)
                 session["recent_cities"] = cities[:5]
                 if option == "Current Temperature":
-                    weather = current(lat, lon)
+                    weather = Current(lat, lon)
                     data = weather.get_data()
                     htmlTable = weather.format(data, name)
 
                 elif "Hourly" in option:
-                    weather = hourly(lat, lon, weather_options[option])
+                    weather = Hourly(lat, lon, weather_options[option])
                     data = weather.get_data()
                     htmlTable = weather.format(data)
 
                 else:
-                    weather = daily(lat, lon, weather_options[option])
+                    weather = Daily(lat, lon, weather_options[option])
                     data = weather.get_data()
                     htmlTable = weather.format(data)
 
                 if htmlTable is None:
                     error = "Failed to retrieve weather data."
+
     return render_template("index.html", options = weather_options.keys(), htmlTable = htmlTable, error = error, name = name, recent_cities = session.get("recent_cities", []))
 
 @app.context_processor
 def inject_year():
-    return {"current_year": datetime.now().year}
+    return { "current_year": datetime.now().year }
 
 @app.route('/robots.txt')
 def robots_txt():
