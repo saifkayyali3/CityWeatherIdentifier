@@ -171,9 +171,11 @@ def request_data(url, params, key):
         try:
             response = requests.get(url, params=params)
             if response.status_code == 200:
+                print(f"Attempt: {i}, Received status code: {response.status_code}")
+                print("Parameters used: ", params)
                 return response.json()[key]
         except requests.RequestException as e:
-            print(f"On attempt {i}: Exception caught:", e)
+            print(f"On Attempt {i}: Exception caught:", e)
         time.sleep(1)
 
 def fetch_daily_data(lat, lon, variables):
