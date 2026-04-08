@@ -171,9 +171,9 @@ def request_data(url, params, key):
         try:
             response = requests.get(url, params=params)
             if response.status_code == 200:
-                print(f"Attempt: {i}, Received status code: {response.status_code}")
-                print("Parameters used: ", params)
                 return response.json()[key]
+            print(f"Attempt: {i}, Received status code: {response.status_code}")
+            print("Parameters used: ", params)
         except requests.RequestException as e:
             print(f"On Attempt {i}: Exception caught:", e)
         time.sleep(1)
@@ -186,8 +186,7 @@ def fetch_daily_data(lat, lon, variables):
         "daily": ",".join(variables),
         "timezone": "auto"
     }
-    request_data(url, params, "daily")
-    return None
+    return request_data(url, params, "daily")
 
 def fetch_hourly_data(lat, lon, variables):
     tzf = TimezoneFinder()
@@ -211,8 +210,7 @@ def fetch_hourly_data(lat, lon, variables):
         "end_hour": (nowLocal + timedelta(hours = 24)).strftime("%Y-%m-%dT%H:%M")
     }
 
-    request_data(url, params, "hourly")
-    return None
+    return request_data(url, params, "hourly")
 
 def fetch_current_temperature(lat, lon):
     data = fetch_hourly_data(lat, lon, ["temperature_2m", "apparent_temperature"])
