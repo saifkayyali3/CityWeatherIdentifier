@@ -171,12 +171,15 @@ def request_data(url, params, key):
         try:
             response = requests.get(url, params=params)
             if response.status_code == 200:
-                return response.json()[key]
+                return response.json().get(key)
             print(f"Attempt: {i}, Received status code: {response.status_code}")
             print("Parameters used: ", params)
+            print("Response:", response.text[:100])
         except requests.RequestException as e:
             print(f"On Attempt {i}: Exception caught:", e)
         time.sleep(1)
+        
+    return None
 
 def fetch_daily_data(lat, lon, variables):
     url = "https://api.open-meteo.com/v1/forecast"
