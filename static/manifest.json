@@ -1,6 +1,6 @@
 {
   "name": "City Weather Identifier",
-  "short_name": "Identify CWeather",
+  "short_name": "City Weather",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#111111",
