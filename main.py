@@ -27,7 +27,7 @@ class Weather:
         
 class Hourly(Weather):
     def get_data(self):
-        return fetch_hourly_data(self.lat, self.lon, self.variables)
+        return fetch_data(self.lat, self.lon, "hourly", self.variables)
 
     def format(self, data, name = None):
         if not data: return None
@@ -53,7 +53,7 @@ class Hourly(Weather):
     
 class Daily(Weather):
     def get_data(self):
-        return fetch_daily_data(self.lat, self.lon, self.variables)
+        return fetch_data(self.lat, self.lon, "daily", self.variables)
 
     def format(self, data, name = None):
         if not data:
@@ -98,7 +98,7 @@ class Current(Weather):
             f"</div>"
         )
 
-weather_options = {
+weatherOptions = {
     "Current Temperature": ["temperature_2m", "apparent_temperature"],
     "Temperature (Across week)": ["temperature_2m_max", "temperature_2m_min"],
     "Rain (Hourly)": ["rain"],
@@ -129,12 +129,10 @@ abrvMap = {
 
 def normalize_input(cityInput):
     cityInput = cityInput.strip()
-    cityInput_lower = cityInput.lower()
+    cityInputLower = cityInput.lower()
     for abv, full in abrvMap.items():
-        if cityInput_lower.endswith(" " + abv) or cityInput_lower.endswith("," + abv) or cityInput_lower == abv:
-            start_index = cityInput_lower.rfind(abv)
-            cityInput = cityInput[:start_index] + full
-            cityInput_lower = cityInput.lower()
+        if cityInputLower.endswith(f" {abv}") or cityInputLower.endswith(f",{abv}") or cityInputLower == abv:
+            return cityInput[:-len(abv)].strip(", ") + full
     return cityInput
 
 def fetch_coordinates(city):
@@ -156,18 +154,17 @@ def fetch_coordinates(city):
     except ValueError:
         population = 0
     
-    if ((locClass == "place" and locType in ["city", "capital", "metropolis"]) or
-        (locClass == "boundary" and locType == "administrative")):
+    if ((locClass == "place" and locType in ["city", "capital", "metropolis"]) or (locClass == "boundary" and locType == "administrative")):
         if len(city) >= 3 and (population >= 20000 or importance >= 0.3):
             return location.latitude, location.longitude
     return None, None
 
-def request_data(url, params, key):
+def request_data(url, params, mode):
     for i in range(1, 4):
         try:
             response = requests.get(url, params=params)
             if response.status_code == 200:
-                return response.json().get(key)
+                return response.json().get(mode)
             print(f"Attempt: {i}, Received status code: {response.status_code}")
             print("Parameters used: ", params)
             print("Response:", response.text[:100])
@@ -177,42 +174,30 @@ def request_data(url, params, key):
         
     return None
 
-def fetch_daily_data(lat, lon, variables):
+def fetch_data(lat, lon, mode, variables):
     url = "https://api.open-meteo.com/v1/forecast"
     params = {
         "latitude": lat,
         "longitude": lon,
-        "daily": ",".join(variables),
+        mode: ",".join(variables),
         "timezone": "auto"
     }
-    return request_data(url, params, "daily")
-
-def fetch_hourly_data(lat, lon, variables):
-    tzf = TimezoneFinder()
-    tzName = tzf.timezone_at(lat = lat, lng = lon)
-    if not tzName: tzName = "UTC"
-    tz = ZoneInfo(tzName)
-    nowLocal = datetime.now(tz)
-
-    if nowLocal.minute >= 30:
-        nowLocal = (nowLocal + timedelta(hours=1)).replace(minute = 0, second = 0, microsecond = 0)
-    else:
-        nowLocal = nowLocal.replace(minute = 0, second = 0, microsecond = 0)
     
-    url = "https://api.open-meteo.com/v1/forecast"
-    params = {
-        "latitude": lat,
-        "longitude": lon,
-        "hourly": ",".join(variables),
-        "timezone": "auto",
-        "start_hour": nowLocal.strftime("%Y-%m-%dT%H:%M"),
-        "end_hour": (nowLocal + timedelta(hours = 24)).strftime("%Y-%m-%dT%H:%M")
-    }
+    if mode == "hourly":
+        tzf = TimezoneFinder()
+        tzName = tzf.timezone_at(lat = lat, lng = lon)
+        if not tzName: tzName = "UTC"
+        tz = ZoneInfo(tzName)
+        nowLocal = datetime.now(tz)
 
-    return request_data(url, params, "hourly")
+        nowLocal = (nowLocal + timedelta(hours=1 if nowLocal.minute >= 30 else 0)).replace(minute = 0, second = 0, microsecond = 0)
+            
+        params.update({"start_hour": nowLocal.strftime("%Y-%m-%dT%H:%M"), "end_hour": (nowLocal + timedelta(hours = 24)).strftime("%Y-%m-%dT%H:%M")})
+       
+    return request_data(url, params, mode) 
 
 def fetch_current_temperature(lat, lon):
-    data = fetch_hourly_data(lat, lon, ["temperature_2m", "apparent_temperature"])
+    data = fetch_data(lat, lon, "hourly", ["temperature_2m", "apparent_temperature"])
     if data and "temperature_2m" in data and "apparent_temperature" in data:
         return data["temperature_2m"][0], data["apparent_temperature"][0]
     return None
@@ -238,11 +223,9 @@ def index():
                 if option == "Current Temperature":
                     weather = Current(lat, lon)
 
-                elif "Hourly" in option:
-                    weather = Hourly(lat, lon, weather_options[option])
-
                 else:
-                    weather = Daily(lat, lon, weather_options[option])
+                    weatherClass = Hourly if "Hourly" in option else Daily
+                    weather = weatherClass(lat, lon, weatherOptions[option])
 
                 data = weather.get_data()
                 htmlTable = weather.format(data, name) if data else None
@@ -250,7 +233,7 @@ def index():
                 if htmlTable is None:
                     error = "Failed to retrieve weather data."
 
-    return render_template("index.html", options = weather_options.keys(), htmlTable = htmlTable, error = error, name = name)
+    return render_template("index.html", options = weatherOptions.keys(), htmlTable = htmlTable, error = error, name = name)
 
 @app.context_processor
 def inject_year():
