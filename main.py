@@ -208,7 +208,7 @@ def index():
     error = None
     name = None
     if request.method == "POST":
-        city = (request.form.get("city") or request.form.get("recentCity") or "").strip() 
+        city = (request.form.get("city") or "").strip() 
         option = request.form.get("Weather-Details")
         
         if not city:

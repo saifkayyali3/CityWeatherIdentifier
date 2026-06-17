@@ -25,8 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const recentCityButton = document.querySelectorAll('.recent-city-btn');
-
     const text = submit.textContent;
 
     form.addEventListener('submit', (event) => {
@@ -58,12 +56,15 @@ document.addEventListener('DOMContentLoaded', () => {
         submit.disabled = true;
     });
 
-    recentCityButton.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const selected = btn.getAttribute('data-city');
+    if (recentCityContainer) {
+        recentCityContainer.addEventListener("click", (event) => {
+            const btn = event.target.closest(".recent-city-btn");
+            if (!btn) return;
+
+            const selected = btn.getAttribute("data-city");
             input.value = selected;
         });
-    });
+    }
 
     const table = document.getElementById("table");
     if (table) {
