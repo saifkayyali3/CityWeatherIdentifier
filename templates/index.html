@@ -45,21 +45,15 @@
       <label style="font-size: 20px;">Enter City and Country Names <br>
         (abbreviating long country names allowed):
       </label>
-      {% if recent_cities %}
-      <div class="mt-2">
-        <h5>Recent Cities:</h5>
-        {% for city in recent_cities %}
-        <button type="button" name="recentCity" data-city="{{ city }}" class="recent-city-btn">
-          {{ city }}
-        </button>
-        {% endfor %}
+
+      <div class="mt-2" id="recent-city-container">
       </div>
-      {% endif %}
+
       <input id="city" type="text" class="form-control" name="city" placeholder="City, Country" value="{{name or '' }}">
       <br>
       <select id="dropdown" class="form-select" name="Weather-Details">
         {% for opt in options %}
-        <option value="{{ opt }}">{{ opt }}</option>
+          <option value="{{ opt }}">{{ opt }}</option>
         {% endfor %}
       </select>
       <br>
@@ -85,9 +79,9 @@
       {% endif %}
     {% endif %}
 
-    {% if error %}
-      <div class="alert alert-danger text-center">{{ error }}</div>
-    {% endif %}
+    <div id="error-message" class="alert alert-danger text-center {% if not error %}d-none{% endif %}" style="border-radius: 15px;">
+      {{ error if error else '' }}
+    </div>
   </div>
 
   <footer class="site-footer">

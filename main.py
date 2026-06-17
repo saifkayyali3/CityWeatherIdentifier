@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_from_directory, Response, session
+from flask import Flask, render_template, request, send_from_directory, Response
 from geopy.geocoders import Nominatim
 from datetime import datetime, timedelta
 import requests
@@ -11,10 +11,6 @@ import time
 
 load_dotenv()
 app = Flask(__name__)
-app.secret_key = os.getenv("SECRET_KEY")
-
-if not app.secret_key:
-    raise ValueError("Set a secret key in a .env file and keep the .env file in .gitignore (format: SECRET_KEY=abc123)\nWARNING: replace abc123 with a real randomly generated secret key and make it long")
 
 class Weather:
     def __init__(self, lat, lon, variables):
@@ -239,16 +235,6 @@ def index():
             else:
                 name = city.title()
 
-                if "recent_cities" not in session: session["recent_cities"] = []
-                
-                cities = session["recent_cities"]
-
-                if name in cities:
-                    cities.remove(name)
-
-                cities.insert(0, name)
-                session["recent_cities"] = cities[:5]
-
                 if option == "Current Temperature":
                     weather = Current(lat, lon)
 
@@ -264,7 +250,7 @@ def index():
                 if htmlTable is None:
                     error = "Failed to retrieve weather data."
 
-    return render_template("index.html", options = weather_options.keys(), htmlTable = htmlTable, error = error, name = name, recent_cities = session.get("recent_cities", []))
+    return render_template("index.html", options = weather_options.keys(), htmlTable = htmlTable, error = error, name = name)
 
 @app.context_processor
 def inject_year():
