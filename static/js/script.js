@@ -8,8 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!form || !submit || !input) return;
 
-    const recentCityButton = document.querySelectorAll('.recent-city-btn');
-
     const cityNameSpan = document.querySelector("#cityname span");
     let currentCity = cityNameSpan ? cityNameSpan.textContent.trim() : "";
     if (currentCity) {
@@ -26,6 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
             recentCityContainer.innerHTML += `<button type="button" name="recentCity" data-city="${city}" class="recent-city-btn">${city}</button>`;
         });
     }
+
+    const recentCityButton = document.querySelectorAll('.recent-city-btn');
 
     const text = submit.textContent;
 
