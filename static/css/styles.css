@@ -46,6 +46,13 @@ body {
     transition: opacity 0.3s;
 }
 
+.recent-city-btn {
+    margin: 5px !important;
+    display: inline-block;
+    width: auto !important;
+    max-width: max-content !important;
+}
+
 #button.is-loading .button-text {
   opacity: 0;
 }
